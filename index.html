@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101c2a">
+<title>Thornwing — A little flight through the wild</title>
+<style>
+:root{color-scheme:dark;--ink:#f4f3e8;--muted:#a9b5b9;--gold:#ffd36b;--coral:#f27d68;--deep:#101c2a}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 18% 20%,#263d4c 0,transparent 35%),radial-gradient(ellipse at 80% 75%,#243847 0,transparent 34%),#101c2a;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.app{height:100%;min-height:100svh;display:flex;align-items:center;justify-content:center;gap:clamp(20px,5vw,76px);padding:24px}.intro{width:min(300px,28vw);align-self:center}.eyebrow{font-size:11px;letter-spacing:.23em;text-transform:uppercase;color:#b8c5c6;font-weight:800}.brand{font-size:clamp(34px,4.2vw,58px);letter-spacing:-.07em;line-height:.96;margin:16px 0 15px;font-weight:950}.brand span{color:var(--gold)}.intro p{font-size:15px;line-height:1.6;color:#c0cbcb;margin:0 0 28px}.howto{border-top:1px solid #ffffff20;padding-top:20px;display:grid;grid-template-columns:34px 1fr;gap:13px 12px;color:#c0cbcb;font-size:13px;line-height:1.45}.key{width:32px;height:32px;border:1px solid #ffffff32;background:#ffffff0b;border-radius:10px;display:grid;place-items:center;color:var(--gold);font-size:17px;font-weight:800}.bestline{margin-top:24px;font-size:12px;color:#aab8bc;letter-spacing:.06em}.bestline strong{color:var(--gold);font-size:16px;margin-left:8px}
+.stage{position:relative;height:min(92svh,820px);aspect-ratio:420/760;max-width:95vw;border:1px solid #ffffff24;border-radius:28px;overflow:hidden;background:#d8e6d9;box-shadow:0 30px 90px #0008,0 0 0 7px #ffffff08;isolation:isolate}.stage canvas{width:100%;height:100%;display:block}.topbar{position:absolute;z-index:2;left:15px;right:15px;top:max(14px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;pointer-events:none}.mini-brand{font-size:11px;letter-spacing:.17em;font-weight:900;color:#18323a;text-shadow:0 1px 5px #fff9}.actions{display:flex;gap:8px;pointer-events:auto}.icon-btn{width:40px;height:40px;border-radius:14px;border:1px solid #fff9;background:#f8f2dfd9;color:#23373b;display:grid;place-items:center;font-size:17px;box-shadow:0 4px 12px #16313a24;cursor:pointer}.icon-btn:active,.primary:active{transform:translateY(1px) scale(.98)}.score{position:absolute;z-index:2;top:78px;left:0;right:0;text-align:center;color:#fff9;font-size:11px;letter-spacing:.2em;font-weight:900;text-shadow:0 2px 6px #17313c66;pointer-events:none}.score b{display:block;color:white;font-size:52px;line-height:1.05;letter-spacing:-.05em;text-shadow:0 3px 12px #17313c55}
+.overlay{position:absolute;z-index:3;inset:0;display:grid;place-items:center;padding:30px 22px;background:linear-gradient(#10253510,#10253525);transition:opacity .2s,visibility .2s}.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}.card{width:min(100%,310px);padding:27px 25px 24px;text-align:center;border:1px solid #ffffffbd;border-radius:26px;background:linear-gradient(150deg,#fff9e9f2,#f8eddbed);color:#24383b;box-shadow:0 16px 50px #122a3a39;backdrop-filter:blur(8px);animation:pop .42s cubic-bezier(.2,.8,.2,1) both}.card .tag{font-size:10px;letter-spacing:.2em;font-weight:900;color:#8b7960;text-transform:uppercase}.card h1{font-size:32px;line-height:1;letter-spacing:-.055em;margin:12px 0 10px}.card p{color:#657276;font-size:13px;line-height:1.5;margin:0 auto 19px;max-width:240px}.bird-mark{width:67px;height:67px;margin:0 auto 13px;border-radius:23px;background:#ffe19a;display:grid;place-items:center;font-size:39px;transform:rotate(-7deg);box-shadow:inset 0 -5px #e9bd68}.primary{border:0;border-radius:15px;padding:15px 20px;width:100%;font-family:inherit;font-size:14px;font-weight:900;letter-spacing:.04em;color:#303a32;background:linear-gradient(#ffdc83,#ffc95f);box-shadow:0 5px 0 #d9a74b,0 9px 18px #ac7c3640;cursor:pointer}.primary span{font-size:17px;margin-left:7px}.hint{margin-top:16px;color:#849091;font-size:10px;letter-spacing:.08em;font-weight:800}.result{display:flex;justify-content:center;gap:32px;margin:15px 0 22px}.result div{display:grid;gap:4px}.result small{font-size:9px;letter-spacing:.14em;color:#869193;font-weight:900}.result strong{font-size:27px;color:#2d4142}.new-best{color:#d28739;font-size:11px;font-weight:900;letter-spacing:.12em;margin:-13px 0 14px}.pausecard h1{font-size:34px}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:760px){.app{padding:0;display:block}.intro{display:none}.stage{height:100svh;height:100dvh;width:100vw;max-width:none;aspect-ratio:auto;border:0;border-radius:0;box-shadow:none}.topbar{left:20px;right:20px}.score{top:88px}.card{width:min(100%,300px)}}
+@media(max-height:620px) and (min-width:761px){.app{gap:26px;padding:10px}.intro{width:240px}.stage{height:96svh}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="app">
+<aside class="intro" aria-label="Game instructions"><div class="eyebrow">A pocket-sized flight</div><div class="brand">THORN<span>WING</span></div><p>One brave little bird. A wild garden full of iron and thorns. How far can you fly?</p><div class="howto"><div class="key">↑</div><div><b>Flap to rise</b><br>Tap, click, or press Space</div><div class="key">↗</div><div><b>Slip through</b><br>Find the opening between the fences</div></div><div class="bestline">PERSONAL BEST <strong id="bestSide">0</strong></div></aside>
+<section class="stage" aria-label="Thornwing game">
+<canvas id="game" aria-label="Flap the bird through thorny iron fences"></canvas>
+<div class="topbar"><div class="mini-brand">THORNWING</div><div class="actions"><button class="icon-btn" id="soundBtn" aria-label="Turn sound off" title="Sound">♫</button><button class="icon-btn" id="pauseBtn" aria-label="Pause game" title="Pause">Ⅱ</button></div></div>
+<div class="score" id="scoreDisplay" aria-live="polite">FLIGHT<b>0</b></div>
+<div class="overlay" id="overlay"><div class="card" id="startCard"><div class="bird-mark">🐦</div><div class="tag">The garden is waiting</div><h1>Ready to fly?</h1><p>Keep your wings moving and watch out for the thorny iron gates.</p><button class="primary" id="startBtn">START FLIGHT <span>↗</span></button><div class="hint">TAP ANYWHERE TO FLAP</div></div><div class="card" id="overCard" hidden><div class="tag">A little tumble</div><h1>Flight over</h1><p>The wild garden can be tricky. Take another run at it?</p><div class="result"><div><small>FLIGHT</small><strong id="finalScore">0</strong></div><div><small>BEST</small><strong id="finalBest">0</strong></div></div><div class="new-best" id="newBest" hidden>✦ NEW PERSONAL BEST ✦</div><button class="primary" id="retryBtn">FLY AGAIN <span>↗</span></button><div class="hint">TAP ANYWHERE TO FLAP</div></div><div class="card pausecard" id="pauseCard" hidden><div class="tag">Take a breather</div><h1>Paused</h1><p>Your bird is patiently waiting.</p><button class="primary" id="resumeBtn">KEEP FLYING <span>↗</span></button></div></div>
+</section>
+</main>
+<script>
+(() => {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const startCard = document.getElementById('startCard');
+  const overCard = document.getElementById('overCard');
+  const pauseCard = document.getElementById('pauseCard');
+  const scoreBox = document.getElementById('scoreDisplay');
+  const H = 760, FLOOR = 688, birdX = 112;
+  let W = 420, scale = 1, dpr = 1, state = 'ready', lastTime = 0;
+  let bird, gates = [], particles = [], clouds = [], score = 0, best = 0;
+  let speed = 178, gateGap = 197, spawnTimer = 0, groundScroll = 0;
+  let muted = false, audio = null, shake = 0, newRecord = false;
+  try { best = Number(localStorage.getItem('thornwing-best')) || 0; muted = localStorage.getItem('thornwing-muted') === 'true'; } catch (_) {}
+  document.getElementById('bestSide').textContent = best;
+  const soundBtn = document.getElementById('soundBtn');
+  soundBtn.textContent = muted ? '♫̸' : '♫';
+  soundBtn.setAttribute('aria-label', muted ? 'Turn sound on' : 'Turn sound off');
+  document.getElementById('pauseBtn').disabled = true;
+
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+    scale = r.height / H; W = r.width / scale;
+    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+    clouds = Array.from({length: 7}, (_, i) => ({x: (i * 113 + 18) % W, y: 120 + (i * 79) % 400, s: .6 + (i % 3) * .22}));
+  }
+  window.addEventListener('resize', resize); resize();
+
+  function reset() {
+    score = 0; speed = 178; gateGap = 197; spawnTimer = 295 / speed; gates = []; particles = []; shake = 0;
+    bird = {x: Math.min(birdX, W * .28), y: 342, vy: 0, angle: 0, wing: 0};
+    for (let i = 0; i < 3; i++) addGate(W + 95 + i * 295);
+    updateScore();
+  }
+  function addGate(x) {
+    const margin = 105;
+    const gapTop = margin + Math.random() * (FLOOR - margin * 2 - gateGap);
+    gates.push({x, gapTop, gapBottom: gapTop + gateGap, passed: false, sway: Math.random() * 6.28, flower: Math.random() > .5});
+  }
+  reset();
+
+  function showCard(which) {
+    overlay.classList.toggle('hidden', !which);
+    startCard.hidden = which !== 'start'; overCard.hidden = which !== 'over'; pauseCard.hidden = which !== 'pause';
+  }
+  function updateScore() { scoreBox.innerHTML = `FLIGHT<b>${score}</b>`; }
+  function startFlight() {
+    if (state === 'over') reset();
+    if (state === 'paused') { state = 'running'; showCard(null); return; }
+    if (state !== 'ready') return;
+    state = 'running'; showCard(null); document.getElementById('pauseBtn').disabled = false; flap();
+  }
+  function flap() {
+    if (state === 'ready') { startFlight(); return; }
+    if (state !== 'running') return;
+    bird.vy = -405; bird.wing = 1;
+    sound(540, .055, 'triangle', .035);
+    for (let i=0;i<3;i++) particles.push({x:bird.x-16,y:bird.y+4,vx:-45-Math.random()*45,vy:(Math.random()-.5)*70,life:.35,color:'#fff1bb',size:2+Math.random()*2});
+  }
+  function endFlight() {
+    if (state !== 'running') return;
+    state = 'over'; shake = 9; sound(135, .23, 'sawtooth', .045);
+    for (let i=0;i<14;i++) particles.push({x:bird.x,y:bird.y,vx:(Math.random()-.5)*210,vy:(Math.random()-.65)*220,life:.65+Math.random()*.4,color:['#ffe08a','#ef8066','#fff0c8'][i%3],size:2+Math.random()*4});
+    newRecord = score > best;
+    if (newRecord) { best = score; try {localStorage.setItem('thornwing-best', best)} catch (_) {} }
+    document.getElementById('bestSide').textContent = best;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalBest').textContent = best;
+    document.getElementById('newBest').hidden = !newRecord;
+    document.getElementById('pauseBtn').disabled = true;
+    setTimeout(() => { if (state === 'over') showCard('over'); }, 420);
+  }
+  function pause() {
+    if (state === 'running') { state = 'paused'; showCard('pause'); }
+    else if (state === 'paused') { state = 'running'; showCard(null); }
+  }
+  function sound(freq, duration, type='sine', volume=.03) {
+    if (muted) return;
+    try {
+      audio ||= new (window.AudioContext || window.webkitAudioContext)();
+      if (audio.state === 'suspended') audio.resume();
+      const o=audio.createOscillator(), g=audio.createGain(); o.type=type; o.frequency.setValueAtTime(freq,audio.currentTime); o.frequency.exponentialRampToValueAtTime(Math.max(50,freq*.72),audio.currentTime+duration);
+      g.gain.setValueAtTime(volume,audio.currentTime); g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);
+      o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+duration);
+    } catch (_) {}
+  }
+
+  document.getElementById('startBtn').addEventListener('click', startFlight);
+  document.getElementById('retryBtn').addEventListener('click', () => { state='ready'; reset(); showCard(null); startFlight(); });
+  document.getElementById('resumeBtn').addEventListener('click', pause);
+  document.getElementById('pauseBtn').addEventListener('click', pause);
+  soundBtn.addEventListener('click', () => { muted=!muted; soundBtn.textContent=muted?'♫̸':'♫'; soundBtn.setAttribute('aria-label',muted?'Turn sound on':'Turn sound off'); try{localStorage.setItem('thornwing-muted',muted)}catch(_){} if(!muted)sound(600,.08); });
+  document.querySelectorAll('button').forEach(b=>b.addEventListener('pointerdown',e=>e.stopPropagation()));
+  document.querySelector('.stage').addEventListener('pointerdown', e => {
+    if (e.target.closest('button')) return;
+    e.preventDefault();
+    if (state === 'ready') startFlight(); else if (state === 'over') { state='ready'; reset(); showCard(null); startFlight(); } else flap();
+  });
+  window.addEventListener('keydown', e => {
+    if (['Space','ArrowUp','KeyW'].includes(e.code)) {e.preventDefault(); if(state==='over'){state='ready';reset();showCard(null);startFlight();}else flap();}
+    if (e.code==='Escape' || e.code==='KeyP') pause();
+  });
+
+  function roundedRect(x,y,w,h,r,fill,stroke) {
+    ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill()} if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}
+  }
+  function cloud(x,y,s) {
+    ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='#fff9e9';ctx.globalAlpha=.72;ctx.beginPath();ctx.ellipse(0,5,30,10,0,0,Math.PI*2);ctx.ellipse(-12,0,13,13,0,0,Math.PI*2);ctx.ellipse(3,-7,17,18,0,0,Math.PI*2);ctx.ellipse(19,1,13,12,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  function background(dt) {
+    const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#a8d7ce');sky.addColorStop(.55,'#d7e8d0');sky.addColorStop(1,'#f3d9a8');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#fff1bf';ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(W*.77,174,48,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+    if(state==='running'){for(const c of clouds){c.x-=dt*8;if(c.x<-60)c.x=W+50;}}
+    clouds.forEach(c=>cloud(c.x,c.y,c.s));
+    // soft far hills
+    ctx.fillStyle='#9dc4a5';ctx.beginPath();ctx.moveTo(0,490);for(let x=0;x<=W+20;x+=20)ctx.lineTo(x,470+Math.sin(x*.009+1)*23+Math.sin(x*.021)*9);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+    ctx.fillStyle='#79ad8c';ctx.beginPath();ctx.moveTo(0,555);for(let x=0;x<=W+20;x+=20)ctx.lineTo(x,535+Math.sin(x*.012+2)*26+Math.sin(x*.027)*8);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+    // distant garden trees
+    for(let i=0;i<Math.ceil(W/75)+2;i++){let x=((i*75-(groundScroll*.25)%75)+W+75)%W;ctx.fillStyle='#64947b';ctx.fillRect(x+22,482,5,83);ctx.beginPath();ctx.arc(x+24,480,22+(i%3)*3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#8eb58c';ctx.beginPath();ctx.arc(x+13,473,12,0,Math.PI*2);ctx.fill();}
+    // foreground sod and tiny flowers
+    ctx.fillStyle='#729967';ctx.fillRect(0,FLOOR,W,H-FLOOR);
+    ctx.fillStyle='#92ad6d';ctx.fillRect(0,FLOOR,W,8);
+    ctx.fillStyle='#e2c47e';ctx.fillRect(0,FLOOR+8,W,5);
+    const scroll=groundScroll%44;
+    for(let x=-scroll;x<W+44;x+=44){ctx.fillStyle='#5e875f';ctx.beginPath();ctx.ellipse(x+8,FLOOR+20,15,4,-.17,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f7d58b';ctx.beginPath();ctx.arc(x+30,FLOOR+28,2.4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f2f0cf';ctx.beginPath();ctx.arc(x+35,FLOOR+28,2,0,Math.PI*2);ctx.fill();}
+  }
+  function drawGate(g) {
+    const x=g.x, w=72, topEnd=g.gapTop, bottomStart=g.gapBottom;
+    const steel=ctx.createLinearGradient(x,0,x+w,0);steel.addColorStop(0,'#314750');steel.addColorStop(.22,'#647b7b');steel.addColorStop(.55,'#40595e');steel.addColorStop(.82,'#718682');steel.addColorStop(1,'#344b52');
+    function segment(y1,y2,top) {
+      if(y2<=y1)return;
+      ctx.fillStyle=steel;ctx.fillRect(x+4,y1,w-8,y2-y1);
+      ctx.fillStyle='#213b43';ctx.fillRect(x,y1,5,y2-y1);ctx.fillRect(x+w-5,y1,5,y2-y1);
+      for(let bx=x+11;bx<x+w-5;bx+=10){ctx.fillStyle='#273f46';ctx.fillRect(bx,y1,4,y2-y1);ctx.fillStyle='#a1aaa0';ctx.globalAlpha=.6;ctx.fillRect(bx+1,y1,1,y2-y1);ctx.globalAlpha=1;}
+      const ys=[y1+12,y1+(y2-y1)*.52,y2-12].filter(y=>y>y1+3&&y<y2-3);
+      ys.forEach(y=>{ctx.fillStyle='#263f46';ctx.fillRect(x+3,y-3,w-6,7);ctx.fillStyle='#9ca99e';ctx.fillRect(x+3,y-3,w-6,2);for(let bx=x+10;bx<x+w-7;bx+=12){ctx.fillStyle='#d3bd85';ctx.beginPath();ctx.arc(bx,y,1.3,0,Math.PI*2);ctx.fill();}});
+      ctx.fillStyle='#354e53';ctx.fillRect(x-4,top?y2-7:y1,w+8,8);
+      if(top){for(let bx=x+5;bx<x+w-4;bx+=13){ctx.beginPath();ctx.moveTo(bx,y1+4);ctx.lineTo(bx+4,y1-9);ctx.lineTo(bx+8,y1+4);ctx.fillStyle='#526e70';ctx.fill();}}
+    }
+    segment(0,topEnd,true); segment(bottomStart,FLOOR,false);
+    ctx.fillStyle='#344d52';ctx.strokeStyle='#9aa79b';ctx.lineWidth=1;
+    for(let bx=x+5;bx<x+w-3;bx+=13){
+      ctx.beginPath();ctx.moveTo(bx,g.gapTop-1);ctx.lineTo(bx+5,g.gapTop+17);ctx.lineTo(bx+10,g.gapTop-1);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(bx+4,g.gapTop+7);ctx.lineTo(bx+5,g.gapTop+17);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(bx,g.gapBottom+1);ctx.lineTo(bx+5,g.gapBottom-17);ctx.lineTo(bx+10,g.gapBottom+1);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(bx+4,g.gapBottom-8);ctx.lineTo(bx+5,g.gapBottom-17);ctx.stroke();
+    }
+    if(g.flower){ctx.strokeStyle='#77966d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+w-2,g.gapTop-28);ctx.bezierCurveTo(x+w+7,g.gapTop-20,x+w-8,g.gapTop-11,x+w-1,g.gapTop-3);ctx.stroke();ctx.fillStyle='#9bb477';ctx.beginPath();ctx.ellipse(x+w+1,g.gapTop-20,5,2,-.6,0,Math.PI*2);ctx.ellipse(x+w-5,g.gapTop-12,5,2,.6,0,Math.PI*2);ctx.fill();}
+  }
+  function drawBird(time) {
+    const bob=state==='ready'?Math.sin(time*.004)*5:0;
+    ctx.save();ctx.translate(bird.x,bird.y+bob);ctx.rotate(bird.angle);
+    ctx.fillStyle='#e4814f';ctx.beginPath();ctx.moveTo(-14,-3);ctx.lineTo(-27,-11);ctx.lineTo(-23,1);ctx.lineTo(-29,7);ctx.lineTo(-12,7);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#e9954f';ctx.beginPath();ctx.ellipse(-1,1,18,14,-.12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffe0a0';ctx.beginPath();ctx.ellipse(2,7,10,7,.2,0,Math.PI*2);ctx.fill();
+    const wingAngle=state==='ready'?Math.sin(time*.009)*.4:(bird.wing>0?-.55:Math.min(.6,bird.vy/600));
+    ctx.save();ctx.translate(-5,1);ctx.rotate(wingAngle);ctx.fillStyle='#c56c42';ctx.beginPath();ctx.ellipse(0,2,10,6,-.18,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#f0b46a';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-5,2);ctx.lineTo(1,4);ctx.moveTo(-2,-1);ctx.lineTo(4,2);ctx.stroke();ctx.restore();
+    ctx.fillStyle='#f4b65f';ctx.beginPath();ctx.arc(7,-7,11,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff9df';ctx.beginPath();ctx.arc(11,-9,4.7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#27383a';ctx.beginPath();ctx.arc(12.4,-9,2,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#e86f53';ctx.beginPath();ctx.moveTo(16,-5);ctx.lineTo(27,-2);ctx.lineTo(17,2);ctx.closePath();ctx.fill();ctx.restore();
+  }
+  function update(dt,time) {
+    if(state==='running'){
+      bird.vy+=1080*dt;bird.y+=bird.vy*dt;bird.angle=Math.max(-.55,Math.min(1.05,bird.vy/560));bird.wing=Math.max(0,bird.wing-dt*3.2);
+      groundScroll+=speed*dt;spawnTimer-=dt;
+      if(spawnTimer<=0){addGate(W+80);spawnTimer=295/speed;}
+      for(const g of gates){g.x-=speed*dt;if(!g.passed&&g.x+72<bird.x){g.passed=true;score++;updateScore();sound(780,.09,'sine',.04);if(score%4===0){speed=Math.min(250,speed+7);gateGap=Math.max(166,gateGap-4);}}}
+      gates=gates.filter(g=>g.x>-90);
+      if(bird.y-12<0||bird.y+12>FLOOR)endFlight();
+      for(const g of gates){if(bird.x+12>g.x&&bird.x-12<g.x+72&&(bird.y-12<g.gapTop+17||bird.y+12>g.gapBottom-17)){endFlight();break;}}
+    }
+    if(state==='over'){bird.vy+=900*dt;bird.y=Math.min(FLOOR-14,bird.y+bird.vy*dt);bird.angle=Math.min(1.3,bird.angle+dt*1.6);}
+    for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=180*dt;p.life-=dt;}particles=particles.filter(p=>p.life>0);shake=Math.max(0,shake-dt*28);
+  }
+  function render(time,dt) {
+    ctx.save();if(shake>0)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+    background(dt);gates.forEach(drawGate);
+    for(let i=0;i<5;i++){const x=((i*137+time*.012)%W),y=230+(i*91)%370+Math.sin(time*.001+i)*8;ctx.globalAlpha=.45;ctx.fillStyle='#fff8dc';ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+    for(const p of particles){ctx.globalAlpha=Math.min(1,p.life*2);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size*Math.min(1,p.life*2),0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;
+    drawBird(time);
+    for(let x=-(groundScroll%86);x<W+86;x+=86){ctx.strokeStyle='#476d53';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+45,FLOOR+8);ctx.lineTo(x+41,FLOOR-2);ctx.moveTo(x+45,FLOOR+8);ctx.lineTo(x+49,FLOOR-4);ctx.stroke();ctx.fillStyle='#f4df9b';ctx.beginPath();ctx.arc(x+41,FLOOR-2,2,0,Math.PI*2);ctx.arc(x+49,FLOOR-4,2,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
+  }
+  function frame(now) {const dt=Math.min(.034,(now-lastTime)/1000||0);lastTime=now;update(dt,now);render(now,dt);requestAnimationFrame(frame);}
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
